@@ -1,0 +1,130 @@
+DROP DATABASE IF EXISTS smartsigma;
+CREATE DATABASE SmartSigma;
+USE SmartSigma;
+
+DROP TABLE IF EXISTS blog;
+CREATE TABLE blog(
+blog_id			BIGINT				NOT NULL AUTO_INCREMENT,
+title 			VARCHAR(150)		NOT NULL,
+subtitle		VARCHAR(150),
+tag				VARCHAR(50),
+category		VARCHAR(50)			NOT NULL,
+publish_date	TIMESTAMP   		DEFAULT NOW(),
+main_image		VARCHAR(255)		NOT NULL,
+
+CONSTRAINT BLOG_PK PRIMARY KEY (blog_id)
+);
+
+DROP TABLE IF EXISTS blog_part;
+CREATE TABLE blog_part(
+blog_part_id	BIGINT 				NOT NULL AUTO_INCREMENT,
+blog_number		INT					NOT NULL,
+blog_text 		VARCHAR(4000)		NOt NULL,
+blog_type		VARCHAR(100)		NOT NULL,
+blog_id			BIGINT				NOT NULL,
+CONSTRAINT BLOG_PART_PK PRIMARY KEY (blog_part_id),
+CONSTRAINT BLOG_PART_FK FOREIGN KEY (blog_id) REFERENCES blog (blog_id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE blog_image(
+image_id		BIGINT				NOT NULL AUTO_INCREMENT,
+blog_part_id	BIGINT				NOT NULL,
+image			VARCHAR(255)		NOT NULL,
+CONSTRAINT IMAGE_PK PRIMARY KEY (image_id),
+CONSTRAINT IMAGE_FK FOREIGN KEY (blog_part_id) REFERENCES blog_part (blog_part_id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+DROP TABLE IF EXISTS sys_comment;
+CREATE TABLE sys_comment(
+comment_id		BIGINT				NOT NULL AUTO_INCREMENT,
+user_name		VARCHAR(50)			NOT NULL,
+email			VARCHAR(100)		NOT NULL,
+comment_text	VARCHAR(1500)		NOT NULL,
+blog_id			BIGINT				NOT NULL,
+CONSTRAINT COMMENT_PK PRIMARY KEY (comment_id),
+CONSTRAINT COMMENT_FK FOREIGN KEY (blog_id) REFERENCES blog (blog_id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+DROP TABLE IF EXISTS career;
+CREATE TABLE career (
+career_id			BIGINT 				NOT NULL AUTO_INCREMENT,
+title				VARCHAR(150)		NOT NULL,
+career_description 	VARCHAR(550)		NOT NULL,
+career_type			VARCHAR(100)		NOT NULL,
+requirments			VARCHAR(1500)		NOT NULL,
+open_date			TIMESTAMP 			DEFAULT NOW(),
+deadline			TIMESTAMP			NOT NULL,
+salary				INT					NOT NULL,
+commision			INT,
+jop_time			VARCHAR(150)		NOT NULL,
+working_days		VARCHAR(150)		NOT NULL,
+location			VARCHAR(250)		NOT NULL,
+
+CONSTRAINT CAREER_PK PRIMARY KEY (career_id)
+);
+
+
+DROP TABLE IF EXISTS application;
+CREATE TABLE application(
+app_id		BIGINT 				NOT NULL AUTO_INCREMENT,
+app_name    VARCHAR(150)		NOT NULL,
+image				VARCHAR(255)		NOT NULL,
+email				VARCHAR(100)		NOT NULL,
+phone				VARCHAR(50)			NOT NULL,
+app_description		VARCHAR(2500)		NOT NULL,
+app_resume			VARCHAR(225)		NOT NULL,
+career_id			BIGINT				NOT NULL,
+
+CONSTRAINT APPLICATION_PK PRIMARY KEY (app_id) ,
+CONSTRAINT APPLICATION_FK FOREIGN KEY (career_id) REFERENCES career (career_id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+DROP TABLE IF EXISTS sys_admin;
+CREATE TABLE sys_admin(
+admin_id			BIGINT 				NOT NULL AUTO_INCREMENT,
+admin_name			VARCHAR(150)		NOT NULL,
+image				VARCHAR(225)		NOT NULL,
+email				VARCHAR(150)		NOT NULL UNIQUE,
+register_date		TIMESTAMP			DEFAULT NOW(),
+admin_password		VARCHAR(100)		NOT NULL,
+is_active			BOOLEAN				DEFAULT TRUE,
+
+CONSTRAINT ADMIN_PK PRIMARY KEY (admin_id)
+);
+
+DROP TABLE IF EXISTS massage;
+CREATE TABLE massage (
+massage_id			BIGINT				NOT NULL AUTO_INCREMENT,
+first_name			VARCHAR(50)			NOT NULL,
+last_name			VARCHAR(50)			NOT NULL,
+email				VARCHAR(150)		NOT NULL,
+phone				VARCHAR(50)			NOT NULL,
+organization_name	VARCHAR(50)			NOT NULL,
+orgnization_type	VARCHAR(50)			NOT NULL,
+content				VARCHAR(2000)		NOT NULL,
+date_time			TIMESTAMP			DEFAULT NOW(),
+
+CONSTRAINT MASSAGE_PK PRIMARY KEY (massage_id)
+);
+
+DROP TABLE IF EXISTS portfolio;
+CREATE TABLE portfolio(
+portfolio_id		BIGINT				NOT NULL AUTO_INCREMENT,
+title				VARCHAR(150)		NOT NULL,
+subtitle			VARCHAR(150)		NOT NULL,
+image				VARCHAR(225)		NOT NULL,
+contract_date		TIMESTAMP			NOT NULL,
+logo				varchar(225),
+
+CONSTRAINT PORTFOLIO_PK PRIMARY KEY (portfolio_id)
+);
+
+DROP TABLE IF EXISTS team_member;
+CREATE TABLE team_member(
+member_id			BIGINT				NOT NULL AUTO_INCREMENT,
+member_name			VARCHAR(100)		NOT NULL,
+member_role			VARCHAR(50)			NOT NULL,
+image				VARCHAR(225)		NOT NULL,
+
+CONSTRAINT MEMBER_PK PRIMARY KEY (member_id)
+);
